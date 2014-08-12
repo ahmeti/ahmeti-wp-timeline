@@ -2,21 +2,15 @@
 <?php
 function Ahmeti_Wp_Timeline_Kurulum()
 {
-    // $wpdb adlı  WP'nin veritabanı sınıfını fonksiyonumuza çağırıyoruz.
     global $wpdb;
-
+    
     // Veri Tabanı Oluştur...
-    // $wpdb isimli WP'nin veritabanı sınıfına $wpdb->soz olarak tanıtıyoruz
-    $wpdb->table = $wpdb->prefix . 'ahmeti_wp_timeline';
+    $create_table = AHMETI_WP_TIMELINE_DB_PREFIX . 'ahmeti_wp_timeline';
   
 
      // Tablolar Var Mı? Eğer varsa hiç bir şey yapma...
     $table_list_array=array();
-    
-    $table_list=mysql_query("SHOW TABLES FROM ".DB_NAME);
-    while($row=mysql_fetch_row($table_list)){
-        $table_list_array[]=$row[0];
-    }
+    $table_list_array = $wpdb->get_results( 'SHOW TABLES FROM '.DB_NAME, ARRAY_A );
 
     
     // Tablo var mı?
@@ -24,7 +18,7 @@ function Ahmeti_Wp_Timeline_Kurulum()
         // Tablo var
     }else{
         // SQL Çalıştır
-        $db_sql="CREATE TABLE IF NOT EXISTS `$wpdb->table` (
+        $db_sql="CREATE TABLE IF NOT EXISTS `$create_table` (
         `event_id` bigint(20) NOT NULL AUTO_INCREMENT,
         `group_id` smallint(6) NOT NULL DEFAULT '0',
         `timeline_bc` bigint(20) DEFAULT '0',
@@ -35,7 +29,7 @@ function Ahmeti_Wp_Timeline_Kurulum()
         PRIMARY KEY (`event_id`)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
         ";
-        $wpdb->query($db_sql);        
+        $wpdb->query( $db_sql );
     }  
     
 
@@ -51,6 +45,8 @@ function Ahmeti_Wp_Timeline_Kurulum()
 function Ahmeti_Wp_Timeline_Admin_Head()
 {
     /* Wp Admin Head */
+    
+    load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
      
     wp_enqueue_script('jquery');
     
@@ -77,7 +73,7 @@ function Ahmeti_Wp_Timeline_Admin_Head()
 function Ahmeti_Wp_Timeline_Head()
 {
     /* Wp User Head */
-    
+    load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
     
     /* JS */
     wp_enqueue_script('jquery');
@@ -86,7 +82,10 @@ function Ahmeti_Wp_Timeline_Head()
     wp_enqueue_script('timelinerColorboxJs');
     
     wp_register_script( 'timelinerTimelinerJs', plugins_url().'/ahmeti-wp-timeline/TimelinerJquery/js/timeliner.min.js', array( 'jquery' ));
+    $translation_array = array( 'ExpandAll' => __('+ Expand All','ahmeti-wp-timeline'), 'CollapseAll' => __('- Collapse All','ahmeti-wp-timeline') );
+    wp_localize_script( 'timelinerTimelinerJs', 'timelinerTimelinerJsObject', $translation_array );
     wp_enqueue_script('timelinerTimelinerJs');
+    
     
     
     /* CSS */
@@ -106,13 +105,16 @@ function Ahmeti_Wp_Timeline_Head()
 function Ahmeti_Wp_Timeline_Admin()
 {
     /* Admin Menü */
-    add_menu_page( 'Ahmeti Wp Timeline', 'Timeline', '5', 'ahmeti-wp-timeline/index.php', 'Ahmeti_Wp_Timeline_Index', plugins_url('ahmeti-wp-timeline/images/ahmeti-wp-timeline-icon.png'), 8 );
+    add_action('admin_enqueue_scripts', 'Ahmeti_Wp_Timeline_Admin_Head');
+    add_menu_page( 'Ahmeti Wp Timeline', 'Timeline', 'edit_pages', 'ahmeti-wp-timeline/index.php', 'Ahmeti_Wp_Timeline_Index', plugins_url('ahmeti-wp-timeline/images/ahmeti-wp-timeline-icon.png') , 6);
+    //load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
 }
 
 
 
-function AhmetiWpTimelineDateTitle($mysqlDateTime){
-    
+function AhmetiWpTimelineDateTitle($mysqlDateTime)
+{
+
     $explTime=explode(' ',$mysqlDateTime);
     // $explTime[0] // 2012-12-12
     // $explTime[1] // 00:00:00
@@ -121,23 +123,23 @@ function AhmetiWpTimelineDateTitle($mysqlDateTime){
     // $explDate[0] // Year
     // $explDate[1] // Month
     // $explDate[2] // Day	
-	
+
     $AhmetiWpTimelineDate='';
-    
-    if ( $explDate[0] > 0 ){
+
+    if($explDate[0] > 0){
         $AhmetiWpTimelineDate.=$explDate[0];
-        if ( $explDate[1] > 0 ){
+        if($explDate[1] > 0){
             $AhmetiWpTimelineDate.='.'.$explDate[1];
-            if ( $explDate[2] > 0 ){
+            if($explDate[2] > 0){
                 $AhmetiWpTimelineDate.='.'.$explDate[2];
-                if ( $explTime[1] != '00:00:00' ){
+                if($explTime[1] != '00:00:00'){
                     $AhmetiWpTimelineDate.=' '.$explTime[1];
                 }
             }
         }
     }
-    
-    return '<span>'.$AhmetiWpTimelineDate.'</span>';
+
+    return $AhmetiWpTimelineDate;
 }
 
 
@@ -152,20 +154,27 @@ function AhmetiWpTimelineGetYear($mysqlDateTime){
 
 function AhmetiWpTimelineShortCodeOutput( $atts ) {
     
+    global $wpdb;
+    
     /*
      * Aynı yıl içinde varsa bir kaç tane olay varsa yılın içine ekle...
      * 
      */
     
+    //echo _e('Hepsini_Ac','ahmeti-wp-timeline');
+    
+    
     $group_id=$atts['groupid'];
 
     $AhmetiWpTimelineEndSqlYear='';
     $AhmetiWpTimelineOut='<div id="timelineContainer" unselectable="on">';
-    
+    $AhmetiWpTimelineOut.='<a class="expandAll" style="float:right">'.__('+ Expand All','ahmeti-wp-timeline').'</a><br/>';
+
     $AhmetiSay=true;
             
-    $sql_group=mysql_query("SELECT * FROM wp_ahmeti_wp_timeline WHERE group_id='$group_id' AND type='event' ORDER BY timeline_bc ASC, timeline_date ASC ");
-    while($row_group=mysql_fetch_array($sql_group)){
+    $sql_group = $wpdb->get_results( 'SELECT * FROM '.AHMETI_WP_TIMELINE_DB_PREFIX.'ahmeti_wp_timeline WHERE group_id="'.$group_id.'" AND type="event" ORDER BY timeline_bc ASC, timeline_date ASC ', ARRAY_A );
+    
+    foreach($sql_group as $row_group){
 
         if ($row_group['timeline_bc'] < 0 ){
             $AhmetiYear=$row_group['timeline_bc'];
@@ -205,7 +214,7 @@ function AhmetiWpTimelineShortCodeOutput( $atts ) {
             <div class="timelineMajor">
                 <h2 class="timelineMajorMarker"><span>';
             
-            if($AhmetiYear < 0){ $AhmetiWpTimelineOut.='M.Ö. '.ltrim($AhmetiYear,'-'); }else{ $AhmetiWpTimelineOut.=$AhmetiYear; }
+            if($AhmetiYear < 0){ $AhmetiWpTimelineOut.=__('BC','ahmeti-wp-timeline').' '.ltrim($AhmetiYear,'-'); }else{ $AhmetiWpTimelineOut.=(int)$AhmetiYear; }
             
             $AhmetiWpTimelineOut.='</span></h2>
             
@@ -236,87 +245,142 @@ function AhmetiWpTimelineShortCodeOutput( $atts ) {
 }
 
 
+$pageslang=__('Pages','ahmeti-wp-timeline');
 
-    function AhmetiWpTimelineSayfala($site_url,$top_sayfa,$page,$limit,$page_url)
-    {
-        // Sayfalama Şeridimiz
+function AhmetiWpTimelineSayfala($site_url,$top_sayfa,$page,$limit,$page_url)
+{
+    // Sayfalama Şeridimiz
 
-        if ($top_sayfa > $limit) :
+    if($top_sayfa > $limit) :
 
-        echo '<div id="sayfala"><span class="say_sabit">Sayfalar</span>';
+        
+        
+        echo '<div id="sayfala"><span class="say_sabit">'.__('Pages','ahmeti-wp-timeline').'</span>';
 
-        $x = 5; // Aktif sayfadan önceki/sonraki sayfa gösterim sayisi
-        $lastP = ceil($top_sayfa / $limit);
+        $x=5; // Aktif sayfadan önceki/sonraki sayfa gösterim sayisi
+        $lastP=ceil($top_sayfa / $limit);
 
         // sayfa 1'i yazdir
-        if ($page==1){
+        if($page == 1){
             echo '<span class="say_aktif">1</span>';
         }else{
             echo '<a class="say_a" href="'.$site_url.''.$page_url.'">1</a>';
         }
 
         // "..." veya direkt 2
-        if ($page-$x>2){
+        if($page - $x > 2){
             echo '<span class="say_b">...</span>';
-            $i = $page-$x;
+            $i=$page - $x;
         }else{
-            $i = 2;
+            $i=2;
         }
         // +/- $x sayfalari yazdir
-        for ($i; $i<=$page+$x; $i++){
-            if ($i==$page)
-            echo '<span class="say_aktif">'.$i.'</span>';
+        for($i; $i <= $page + $x; $i++){
+            if($i == $page)
+                echo '<span class="say_aktif">'.$i.'</span>';
             else
-            echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$i.'">'.$i.'</a>';
-            if ($i==$lastP)
-            break;
+                echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$i.'">'.$i.'</a>';
+            if($i == $lastP)
+                break;
         }
 
         // "..." veya son sayfa
-        if ($page+$x<$lastP-1){
+        if($page + $x < $lastP - 1){
             echo '<span class="say_b">...</span>';
             echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
-        }elseif ($page+$x==$lastP-1){
+        }elseif($page + $x == $lastP - 1){
             echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
         }
         echo '</div>';//#sayfala
-        endif;
+    endif;
+}
+    
+    
+class AhmetiWpTimelineAddEditorButton{
+    # Plugin Name: mygallery
+    # Plugin URI: http://wphardcore.com
+    # Description: A simple user interface for Gallery shortcode
+    # Version: 0.1
+    # Author: Gary Cao
+    # Author URI: http://garyc40.com
+
+
+
+    public function __construct()
+    {
+        add_action('admin_init',array($this,'action_admin_init'));
+    }
+
+
+
+    public function action_admin_init()
+    {
+        // only hook up these filters if we're in the admin panel, and the current user has permission
+        // to edit posts and pages
+        if(current_user_can('edit_posts') && current_user_can('edit_pages')){
+            
+            global $wp_version;
+
+            if (version_compare($wp_version,'3.9','<')){
+
+                // Old TinyMce 3.0
+                add_filter('mce_buttons',array($this,'filter_mce_button')); // < WP 3.9
+                add_filter('mce_external_plugins',array($this,'filter_mce_plugin')); // < WP 3.9
+            }else{
+
+                // New TinyMce 4.0
+                add_filter( 'mce_external_plugins', array($this,'my_add_tinymce_plugin') );
+                add_filter( 'mce_buttons', array($this,'my_register_mce_button') );
+
+            }
+
+        }
+    }
+
+
+
+    public function filter_mce_button($buttons)
+    {
+        // add a separation before our button, here our button's id is "mygallery_button"
+        array_push($buttons,'|','mygallery_button');
+        return $buttons;
+    }
+
+
+
+    public function filter_mce_plugin($plugins)
+    {
+        
+        // this plugin file will work the magic of our button
+        
+        if (WPLANG == 'tr_TR'){
+            $plugins['mygallery']=plugins_url().'/ahmeti-wp-timeline/Admin/EditorButton/EditorButton-tr_TR.js';
+        }else{
+            $plugins['mygallery']=plugins_url().'/ahmeti-wp-timeline/Admin/EditorButton/EditorButton-en_US.js';
+        }
+        return $plugins;
+    }
+
+    
+    
+    
+    
+    
+    // Declare script for new button
+    public function my_add_tinymce_plugin( $plugin_array ) {
+            $plugin_array['my_mce_button'] = plugins_url().'/ahmeti-wp-timeline/Admin/EditorButton/EditorButtonTinyMce4.0.js';
+            //$plugin_array['my_mce_button'] = plugins_url().'/ahmeti-wp-timeline/Admin/EditorButton/EditorButton-tr_TR.js';
+            return $plugin_array;
+    }
+
+    // Register new button in the editor
+    public function my_register_mce_button( $buttons ) {
+            array_push( $buttons, 'my_mce_button' );
+            return $buttons;
     }
     
     
-class AhmetiWpTimelineAddEditorButton
-{
-        # Plugin Name: mygallery
-        # Plugin URI: http://wphardcore.com
-        # Description: A simple user interface for Gallery shortcode
-        # Version: 0.1
-        # Author: Gary Cao
-        # Author URI: http://garyc40.com
     
-	public function __construct() {
-		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
-	}
-	
-	public function action_admin_init() {
-		// only hook up these filters if we're in the admin panel, and the current user has permission
-		// to edit posts and pages
-		if ( current_user_can( 'edit_posts' ) && current_user_can( 'edit_pages' ) ) {
-			add_filter( 'mce_buttons', array( $this, 'filter_mce_button' ) );
-			add_filter( 'mce_external_plugins', array( $this, 'filter_mce_plugin' ) );
-		}
-	}
-	
-	public function filter_mce_button( $buttons ) {
-		// add a separation before our button, here our button's id is "mygallery_button"
-		array_push( $buttons, '|', 'mygallery_button' );
-		return $buttons;
-	}
-	
-	public function filter_mce_plugin( $plugins ) {
-		// this plugin file will work the magic of our button
-		$plugins['mygallery'] = plugins_url().'/ahmeti-wp-timeline/Admin/EditorButton/EditorButton.js';
-		return $plugins;
-	}
 }
 
 ?>

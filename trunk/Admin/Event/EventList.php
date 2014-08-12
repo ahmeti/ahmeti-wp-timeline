@@ -1,12 +1,14 @@
 <?php if(!defined('AHMETI_WP_TIMELINE_KONTROL')){ echo 'Bu dosyaya erşiminiz engellendi.'; exit(); } ?>
-<h2>Timeline Olay Listesi</h2>
+<h2><?php echo _e('Timeline Event List','ahmeti-wp-timeline'); ?></h2>
 <?php
+global $wpdb;
 
 /* Sayfalama İçin */
 $page=@$_GET['is_page'];
 (int)$page_limit=get_option('AhmetiWpTimelinePageLimit');
 
-$group_say=mysql_fetch_assoc(mysql_query("SELECT COUNT(event_id) FROM wp_ahmeti_wp_timeline WHERE type='event' "));
+
+$eventSay = $wpdb->get_row( 'SELECT COUNT(event_id) as EventSay FROM '.AHMETI_WP_TIMELINE_DB_PREFIX.'ahmeti_wp_timeline WHERE type="event"', OBJECT );
 
 if(empty($page) || !is_numeric($page)){
     $baslangic=1;
@@ -16,29 +18,31 @@ if(empty($page) || !is_numeric($page)){
 }
 
 $groupDb=array();
-$grouplist=mysql_query("SELECT group_id,title FROM wp_ahmeti_wp_timeline WHERE type='group_name'");
-while($group=mysql_fetch_array($grouplist)){
+
+$group_list = $wpdb->get_results( 'SELECT group_id,title FROM '.AHMETI_WP_TIMELINE_DB_PREFIX.'ahmeti_wp_timeline WHERE type="group_name"', ARRAY_A );
+
+foreach($group_list as $group){
     $groupDb[$group['group_id']]=$group['title'];
 }
 
-$toplam_sayfa=(int)$group_say['COUNT(event_id)'];
+$toplam_sayfa=(int)$eventSay->EventSay;
 $baslangic=($baslangic-1)*$page_limit;
 
-$event_list=mysql_query("SELECT event_id,group_id,title,timeline_bc,timeline_date FROM wp_ahmeti_wp_timeline WHERE type='event' ORDER BY event_id DESC LIMIT $baslangic,$page_limit");
+$event_list = $wpdb->get_results( 'SELECT event_id,group_id,title,timeline_bc,timeline_date FROM '.AHMETI_WP_TIMELINE_DB_PREFIX.'ahmeti_wp_timeline WHERE type="event" ORDER BY event_id DESC LIMIT '.$baslangic.','.$page_limit, ARRAY_A );
 
 if($toplam_sayfa > 0){
     ?>
-    <table style="width: 700px">
+    <table style="width: 700px" class="ahmetiwptablestd">
         <tr>
-            <td style="padding: 5px;border: 1px solid #ddd;width: 20px;font-weight: bold">Event_ID</td>
-            <td style="padding: 5px;border: 1px solid #ddd;width: 100px;font-weight: bold">Grup Adı</td>
-            <td style="padding: 5px;border: 1px solid #ddd;width: 100px;font-weight: bold">Olay Başlığı</td>
-            <td style="padding: 5px;border: 1px solid #ddd;width: 100px;font-weight: bold">Olay Zamanı</td>
-            <td style="padding: 5px;border: 1px solid #ddd;width: 80px;font-weight: bold">Düzenle</td>
-            <td style="padding: 5px;border: 1px solid #ddd;width: 80px;font-weight: bold">Sil</td>
+            <td style="padding: 5px;border: 1px solid #ddd;width: 20px;font-weight: bold"><?php echo _e('Event ID','ahmeti-wp-timeline'); ?></td>
+            <td style="padding: 5px;border: 1px solid #ddd;width: 100px;font-weight: bold"><?php echo _e('Group Name','ahmeti-wp-timeline'); ?></td>
+            <td style="padding: 5px;border: 1px solid #ddd;width: 100px;font-weight: bold"><?php echo _e('Event Title','ahmeti-wp-timeline'); ?></td>
+            <td style="padding: 5px;border: 1px solid #ddd;width: 100px;font-weight: bold"><?php echo _e('Event Time','ahmeti-wp-timeline'); ?></td>
+            <td style="padding: 5px;border: 1px solid #ddd;width: 80px;font-weight: bold"><?php echo _e('Edit','ahmeti-wp-timeline'); ?></td>
+            <td style="padding: 5px;border: 1px solid #ddd;width: 80px;font-weight: bold"><?php echo _e('Delete','ahmeti-wp-timeline'); ?></td>
         </tr>
         <?php
-        while ($event=mysql_fetch_assoc($event_list)){
+        foreach($event_list as $event){
         ?>
         <tr>
             <td style="padding: 5px;border: 1px solid #ddd;"><?php echo $event['event_id']; ?></td>
@@ -54,10 +58,10 @@ if($toplam_sayfa > 0){
                 ?>
             </td>
             <td style="padding: 5px;border: 1px solid #ddd;">
-                <a href="<?php echo AHMETI_WP_TIMELINE_ADMIN_URL; ?>&islem=EditEventForm&event_id=<?php echo $event['event_id']; ?>"><img src="<?php echo plugins_url().'/ahmeti-wp-timeline/images/edit.png'; ?>" /></a>
+                <a href="<?php echo AHMETI_WP_TIMELINE_ADMIN_URL; ?>&islem=EditEventForm&event_id=<?php echo $event['event_id']; ?>"><img style="width: 20px" src="<?php echo plugins_url().'/ahmeti-wp-timeline/images/edit.png'; ?>" /></a>
             </td>
             <td style="padding: 5px;border: 1px solid #ddd;">
-                <a onclick="return confirm('Olayı silmek istediğinizden emin misiniz?')" href="<?php echo AHMETI_WP_TIMELINE_ADMIN_URL; ?>&islem=DeleteEventPost&event_id=<?php echo $event['event_id']; ?>"><img src="<?php echo plugins_url().'/ahmeti-wp-timeline/images/delete.png'; ?>" /></a>
+                <a onclick="return confirm('<?php echo _e('Are you sure you want to delete this event?','ahmeti-wp-timeline'); ?>')" href="<?php echo AHMETI_WP_TIMELINE_ADMIN_URL; ?>&islem=DeleteEventPost&event_id=<?php echo $event['event_id']; ?>"><img style="width: 20px" src="<?php echo plugins_url().'/ahmeti-wp-timeline/images/delete.png'; ?>" /></a>
             </td>            
 
         </tr>
@@ -75,7 +79,7 @@ if($toplam_sayfa > 0){
 }else{
     // Söz yok ise uyarı mesajı ver.
     ?>
-    <p class="ahmeti_hata">Hiç olay eklememişsiniz :(</p>
+    <p class="ahmeti_hata"><?php echo _e('You have not added any event :(','ahmeti-wp-timeline'); ?></p>
     <?php
 }
 ?>

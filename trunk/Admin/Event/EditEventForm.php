@@ -1,9 +1,9 @@
 <?php if(!defined('AHMETI_WP_TIMELINE_KONTROL')){ echo 'Bu dosyaya erşiminiz engellendi.'; exit(); } ?>
 <?php
+global $wpdb;
 $event_id=(int)$_GET['event_id'];
 
-$event=mysql_fetch_array(mysql_query("SELECT * FROM wp_ahmeti_wp_timeline WHERE event_id=$event_id AND type='event' "));
-
+$event = $wpdb->get_row( 'SELECT * FROM '.AHMETI_WP_TIMELINE_DB_PREFIX.'ahmeti_wp_timeline WHERE event_id='.$event_id.' AND type="event"', ARRAY_A );
 
 $exp_date=explode(' ',$event['timeline_date']);
 
@@ -12,7 +12,11 @@ $exp_date=explode(' ',$event['timeline_date']);
 if ($exp_date[0] == '0000-00-00'){
     $event_date_val='';
 }else{
-    $event_date_val=$exp_date[0];
+    $event_date_val=explode('-',$exp_date[0]);
+    
+    if ($event_date_val[0]=='0000'){ $event_date_val[0]=''; }
+    if ($event_date_val[1]=='00'){ $event_date_val[1]=''; }
+    if ($event_date_val[2]=='00'){ $event_date_val[2]=''; }
 }
 
 
@@ -56,17 +60,17 @@ wp_register_style( 'AhmetiWpTimelineJqueryUiCss', plugins_url().'/ahmeti-wp-time
 wp_enqueue_style( 'AhmetiWpTimelineJqueryUiCss' );
 
 ?>
-<h2>Olayı Düzenle</h2>
+<h2><?php echo _e('Edit Event','ahmeti-wp-timeline'); ?></h2>
 
 <div style="display: block;padding: 0 0 10px 0">
     <form id="form_gonder" action="<?php echo AHMETI_WP_TIMELINE_ADMIN_URL; ?>&islem=EditEventPost" method="post">
         
-        <h3 style="margin-bottom: 1px;">Grup Adı</h3>
+        <h3 style="margin-bottom: 1px;"><?php echo _e('Group Name','ahmeti-wp-timeline'); ?></h3>
         <select name="group_id">
-            <option>Grubu Seçiniz...</option>
+            <option><?php echo _e('Select Group...','ahmeti-wp-timeline'); ?></option>
             <?php
-                $group_list=mysql_query("SELECT group_id,title FROM wp_ahmeti_wp_timeline WHERE type='group_name' ORDER BY title ASC ");
-                while($group_row=mysql_fetch_array($group_list)){
+                $group_list = $wpdb->get_results( 'SELECT group_id,title FROM '.AHMETI_WP_TIMELINE_DB_PREFIX.'ahmeti_wp_timeline WHERE type="group_name" ORDER BY title ASC', ARRAY_A );
+                foreach ($group_list as $group_row) {
                     ?>
                     <option value="<?php echo $group_row['group_id']; ?>" <?php if($event['group_id']==$group_row['group_id']){ echo 'selected="selected"'; } ?>><?php echo $group_row['title']; ?></option>
                     <?php
@@ -75,18 +79,41 @@ wp_enqueue_style( 'AhmetiWpTimelineJqueryUiCss' );
         </select>
         <br/><br/>
         
-        <h3 style="margin-bottom: 1px;">Olay Başlığı</h3>
+        <h3 style="margin-bottom: 1px;"><?php echo _e('Event Title','ahmeti-wp-timeline'); ?></h3>
         <input type="text" name="event_title" size="40" value="<?php echo $event['title']; ?>"/>
         <br/><br/>
 
-        <h3 style="margin-bottom: 1px;">Olay Zamanı (Milattan Sonra)</h3>
-        <input type="text" id="MyDate" name="event_date" size="40" value="<?php echo $event_date_val; ?>"/> [ ! ] Örnegin: 2010-01-30 [Yıl-Ay-Gün]
+        <h3 style="margin-bottom: 1px;"><?php echo _e('Event Time (If Anno Domini)','ahmeti-wp-timeline'); ?></h3>
+        <!--<input type="text" id="MyDate" name="event_date" size="40" value="<?php echo $event_date_val; ?>"/> <?php echo _e('[ ! ] e.g.: 2010-01-30 [Year-Month-Day]','ahmeti-wp-timeline'); ?>-->
+        
+        <div style="overflow: hidden;padding-top: 10px;">
+            
+            <div style="float: left;margin-right: 20px">
+                <div style="float: left;padding-top: 6px"><input style="visibility: hidden;width: 0;margin: 0;padding: 0;"type="text" class="ahmetiDate" name="event_date" size="1" /></div>
+            </div>
+            
+            <div style="float: left;margin-right: 20px">
+                <div style="float: left;padding: 5px 4px 0 0;font-weight: bold"><?php echo _e('Year','ahmeti-wp-timeline'); ?></div>
+                <div style="float: left"><input type="text" class="ahmetiDateYear" name="event_date_year" size="4" value="<?php echo $event_date_val[0]; ?>"/></div>
+            </div>
+            
+            <div style="float: left;margin-right: 20px">
+                <div style="float: left;padding: 5px 4px 0 0;font-weight: bold"><?php echo _e('Month','ahmeti-wp-timeline'); ?></div>
+                <div style="float: left"><input type="text" class="ahmetiDateMonth" name="event_date_month" size="2" value="<?php echo $event_date_val[1]; ?>"/></div>
+            </div>
+            
+            <div style="float: left">
+                <div style="float: left;padding: 5px 4px 0 0;font-weight: bold"><?php echo _e('Day','ahmeti-wp-timeline'); ?></div>
+                <div style="float: left"><input type="text" class="ahmetiDateDay" name="event_date_day" size="2" value="<?php echo $event_date_val[2]; ?>"/></div>
+            </div>
+        </div>
+        
         <br/>
-        <input type="text" name="event_time" id="EventTime" size="40" maxlength="8" value="<?php echo $event_time_val; ?>"/> İsterseniz zamanı ekleyebilirsiniz. [ ! ] Örnegin: 14:30:45 [Saat-Dakika-Saniye]
+        <input type="text" name="event_time" id="EventTime" size="10" maxlength="8" value="<?php echo $event_time_val; ?>"/> <?php echo _e('If you want you can also add time. [ ! ] e.g.: 14:30:45 [Hour-Minute-Second]','ahmeti-wp-timeline'); ?>
         <br/><br/>
         
-        <h3 style="margin-bottom: 1px;">Olay Zamanı (Milattan Önce)</h3>
-        <input type="text" name="event_bc" size="40" value="<?php echo ltrim($event_bc_val,'-'); ?>"/> [ ! ] Örnegin: 15000
+        <h3 style="margin-bottom: 1px;"><?php echo _e('Event Time (If Before Christ)','ahmeti-wp-timeline'); ?></h3>
+        <input type="text" name="event_bc" size="40" id="event_bc_input" value="<?php echo ltrim($event_bc_val,'-'); ?>"/> <?php echo _e('[ ! ] e.g.: 2000','ahmeti-wp-timeline'); ?>
         <br/><br/>
         <br/><br/>
         
@@ -96,7 +123,7 @@ wp_enqueue_style( 'AhmetiWpTimelineJqueryUiCss' );
         
         <br/><br/>
         <input type="hidden" value="<?php echo $event['event_id']; ?>" name="event_id" />
-        <input type="submit" value="Olayı Güncelle" class="button" id="gonder_button"/>
+        <input type="submit" value="<?php echo _e('Update Event','ahmeti-wp-timeline'); ?>" class="button" id="gonder_button"/>
         
     </form>
 </div>
