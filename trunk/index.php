@@ -5,28 +5,20 @@
     Plugin URI: http://ahmeti.net/
     Description: A nice plugin that allows you to make a timeline about anything. Herhangi bir konu hakkında bir timeline oluşarabilirsiniz.
     Author: Ahmet Imamoglu
-    Version: 3.0
+    Version: 5.0
     Author URI: http://ahmeti.net/
+    License: GPLv2 or later (license.txt)
 */
 
 /*
-    Copyright 2012 Ahmet İmamoğlu ( ahmet@ahmeti.net )
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
+ *  Copyright 2014 Ahmet İmamoğlu ( ahmet@ahmeti.net )
+ *
+ *  LICENSE:
+ * 
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
+ * 
+ */
 
 define('AHMETI_WP_TIMELINE_KONTROL',true);
 define('AHMETI_WP_TIMELINE_ADMIN_URL', admin_url().'admin.php?page=ahmeti-wp-timeline/index.php');
@@ -36,14 +28,11 @@ define('AHMETI_WP_TIMELINE_DB_PREFIX',$wpdb->prefix);
 
 require_once 'AhmetiWpTimelineFunction.php';
 
-
-/*
- *  OPTION LIST
- * 
- *  get_option('AhmetiWpTimelinePageLimit')  // Sayfa listeleme limiti
- * 
- */
-
+//  OPTION LIST
+// $ahmetiWpTimelineOpt->DefaultSort = ASC
+// $ahmetiWpTimelineOpt->StartState = open
+// $ahmetiWpTimelineOpt->PageLimit = 20
+ 
 
 if ( isset($_GET['activate']) && @$_GET['activate'] == 'true' )
 {
@@ -55,10 +44,9 @@ if ( isset($_GET['activate']) && @$_GET['activate'] == 'true' )
 
 
 if (!is_admin()) {
+    
     // Wp User Head
-    
-    //add_action('wp_enqueue_scripts', 'Ahmeti_Wp_Timeline_Head');
-    
+    add_action('wp_enqueue_scripts', 'Ahmeti_Wp_Timeline_Head');
     add_shortcode( 'ahmetiwptimeline', 'AhmetiWpTimelineShortCodeOutput' );
     
 }else{
@@ -115,8 +103,16 @@ function Ahmeti_Wp_Timeline_Index(){   //ahmeti_index
         
     }elseif (@$_GET['islem']=='DeleteEventPost'){
         require_once 'Admin/Event/DeleteEventPost.php';
+    
         
-
+        
+    /* Settings Action*/
+    }elseif (@$_GET['islem']=='EditSettingsForm'){
+        require_once 'Admin/Settings/EditSettingsForm.php';
+    }elseif (@$_GET['islem']=='EditSettingsPost'){
+        require_once 'Admin/Settings/EditSettingsPost.php';
+        
+        
     /* Anasyafa */
     }else{
         require_once 'Admin/Group/GroupList.php';

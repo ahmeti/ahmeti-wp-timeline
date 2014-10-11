@@ -1,0 +1,34 @@
+/* 
+    Document   : Ahmeti_Wp_Timeline_Admin_Css
+    Created on : 17.Ağu.2013, 19:32:43
+    Author     : ahmet
+    Description: ahmeti.net
+*/
+
+/* ADMIN */
+.miniLangEn {color:#C00;font-size: 10px !important;font-weight: normal;}
+
+.ahmetiwptablestd {border-spacing: 0;border-collapse: collapse;width: 100%;font-family: Arial}
+.ahmetiwptablestd th {border: 1px solid #ddd;text-align: left;background-color: #eee}
+.ahmetiwptablestd td {border: 1px solid #ddd;background-color: white}
+
+.ahmetiwptablesSettings {width: inherit}
+.ahmetiwptablesSettings th {border: 1px solid #ddd;padding: 5px; text-align: right;width: 200px}
+.ahmetiwptablesSettings td {border: 1px solid #ddd;padding: 5px;width: 500px}
+
+.ahmetiwptablesSettings .ahmetiRow {display: block;padding: 3px;}
+.ahmetiwptablesSettings .dateformat {font-family: monospace;background-color: black;color: white;font-size: 12px;display: inline-block;padding: 3px}
+
+.ahmetiWpTimelineFooter {overflow: hidden;border: 1px solid #ddd}
+.ahmetiWpTimelineFooter .left {float: left;}
+.ahmetiWpTimelineFooter .left img {margin: 3px 5px 0 3px;border: 2px solid #bbb;
+            border-radius: 30px;
+            -moz-border-radius: 30px;
+            -khtml-border-radius: 30px;
+            -webkit-border-radius: 30px;}
+.ahmetiWpTimelineFooter strong {font-weight: bold}
+.ahmetiWpTimelineFooter .footeradmindesc{font:14px Arial}
+
+i.mce-i-ahmeti-timeline-mce-icon {
+    background-image: url('../../images/ahmeti-wp-timeline-button.png');
+}

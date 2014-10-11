@@ -52,33 +52,33 @@ wp_enqueue_style( 'AhmetiWpTimelineJqueryUiCss' );
                 <div style="float: left;padding-top: 6px"><input style="visibility: hidden;width: 0;margin: 0;padding: 0;"type="text" class="ahmetiDate" name="event_date" size="1" /></div>
             </div>
             
-            <div style="float: left;margin-right: 20px">
+            <div style="float: left;margin-right: 20px"> 
                 <div style="float: left;padding: 5px 4px 0 0;font-weight: bold"><?php echo _e('Year','ahmeti-wp-timeline'); ?></div>
-                <div style="float: left"><input type="text" class="ahmetiDateYear" name="event_date_year" size="4" value=""/></div>
+                <div style="float: left"><input type="number" autocomplete="off" class="ahmetiDateYear" name="event_date_year" size="4" value=""/></div>
             </div>
             
             <div style="float: left;margin-right: 20px">
                 <div style="float: left;padding: 5px 4px 0 0;font-weight: bold"><?php echo _e('Month','ahmeti-wp-timeline'); ?></div>
-                <div style="float: left"><input type="text" class="ahmetiDateMonth" name="event_date_month" size="2" value=""/></div>
+                <div style="float: left"><input type="number" autocomplete="off" class="ahmetiDateMonth" name="event_date_month" size="2" value="" min="01" max="12"/></div>
             </div>
             
             <div style="float: left">
                 <div style="float: left;padding: 5px 4px 0 0;font-weight: bold"><?php echo _e('Day','ahmeti-wp-timeline'); ?></div>
-                <div style="float: left"><input type="text" class="ahmetiDateDay" name="event_date_day" size="2" value=""/></div>
+                <div style="float: left"><input type="number" autocomplete="off" class="ahmetiDateDay" name="event_date_day" size="2" value="" min="01" max="31" /></div>
             </div>
         </div>
         
         <br/>
-        <input type="text" name="event_time" id="EventTime" size="10" maxlength="8" /> <?php echo _e('If you want you can also add time. [ ! ] e.g.: 14:30:45 [Hour-Minute-Second]','ahmeti-wp-timeline'); ?>
+        <input type="text" name="event_time" autocomplete="off" id="EventTime" size="10" maxlength="8" /> <?php echo _e('If you want you can also add time. [ ! ] e.g.: 14:30:45 [Hour-Minute-Second]','ahmeti-wp-timeline'); ?>
         <br/><br/>
         
         <h3 style="margin-bottom: 1px;"><?php echo _e('Event Time (If Before Christ)','ahmeti-wp-timeline'); ?></h3>
-        <input type="text" name="event_bc" id="event_bc_input" size="40"/> <?php echo _e('[ ! ] e.g.: 2000','ahmeti-wp-timeline'); ?>
+        <input type="number" name="event_bc" id="event_bc_input" size="40"/> <?php echo _e('[ ! ] e.g.: 2000','ahmeti-wp-timeline'); ?>
         <br/><br/>
         <br/><br/>
         
-        <div style="width: 650px">
-            <?php wp_editor('','event_content',$settings = array('textarea_rows'=> 20 ,'wpautop' => false));?>
+        <div>
+            <?php wp_editor('','event_content',$settings = array('textarea_rows'=> 20 ,'wpautop' => false));?> 
         </div>
         
         <br/><br/>

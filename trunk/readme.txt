@@ -3,9 +3,9 @@ Contributors: ahmeti
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HUXL44BC8SRHQ
 Tags: wp timeline, timeline, zaman cizelgesi, ahmeti, zaman cizgisi
 Requires at least: 3.3
-Tested up to: 3.5.1
-Stable tag: 3.5.1
-License: GPLv2 or later
+Tested up to: 4.0
+Stable tag: 4.0
+License: GPLv2 or later (license.txt)
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A nice plugin that allows you to make a timeline about anything.
@@ -44,13 +44,26 @@ Yazdığınız olayların içine her türlü çoklu ortam (resim,video,mp3 vb.) 
  1. Go to Admin Panel > Plugins menu to activate plugin.
  1. A little button will show up [this picture] (http://ahmeti.net/wp-content/uploads/2013/08/AhmetiWpTimelineEditor.png)
  1. After clicking the button, you can select which timeline to show by entering "Grup_ID" value and hit "ADD" button.
+ 1. Shortcode example: [ahmetiwptimeline groupid="1" sort="DESC" state="open"]
+ 1. Examples: sort="ASC" or sort="DESC" / state="open" or state="close"
 * Turkish
  1. `/wp-content/plugins/` klasörünün içerisine .zip dosyasından çıkan "ahmeti-wp-timeline" klasörüne atınız.
  1. Admin paneli "Eklentiler" menüsünden eklentiyi aktif ediniz.
  1. Eklentiyi aktif ettikten sonra editörün yanına [şurada görülen] (http://ahmeti.net/wp-content/uploads/2013/08/AhmetiWpTimelineEditor.png) küçük bir buton çıkacaktır.
  1. Butona tıkladıktan sonra açılan pencereye Grup Listesinden hangi timeline (zaman çizelgesi) göstermek isterseniz "Grup_ID" değerini girip "Ekle" butonuna basmanız yeterli olacaktır. 
-
+ 1. Shortcode öreneği: [ahmetiwptimeline groupid="1" sort="DESC" state="open"]
+ 1. Örnekler: sort="ASC" veya sort="DESC" / state="open" veya state="close"
 == Changelog ==
+
+= 5.0 =
+* Added date and time format templates for events
+* Added events count in admin page
+
+= 4.0 =
+* Added Settings page.
+* Added Default Sort, Start State and Admin Page Limit features
+* Added customizable timeline features
+* Added filter in Event List for Gorups
 
 = 3.0 =
 * Tüm sorgular $wpdb ye uyarlandı.

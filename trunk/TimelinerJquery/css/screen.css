@@ -1,0 +1,192 @@
+/* ============ TIMELINE ============= */
+
+div#timelineContainer {
+border-left:2px solid #ccc;
+margin:20px auto;
+overflow: hidden;
+-moz-user-select: none;
+-webkit-user-select: none;
+}
+
+div#timelineContainer .timelineToggle {
+float:right;
+margin-right:0;
+white-space:nowrap;
+}
+
+div#timelineContainer a.expandAll {
+color:#C00;
+cursor:pointer;
+background:#ccc;
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+border-radius:4px;
+font-size:12px;
+padding:3px 5px;
+text-decoration: none;
+}
+
+div#timelineContainer a.expandAll:hover {
+color:#C00;
+cursor:pointer;
+}
+
+div#timelineContainer div.timelineMajor {
+clear:both;
+margin:0 0 12px;
+/*width:900px;*/
+}
+
+div#timelineContainer .timelineMajor h2 {
+background:url(../images/timeline_century_tick.gif) left center no-repeat;
+font-family:Palatino,"Times New Roman", Times, serif;
+cursor: pointer;
+font-size:2em;
+font-weight:400;
+margin:0 0 0;
+padding:4px 4px 4px 20px;
+float: left
+}
+
+div#timelineContainer .timelineMajor h2 span {
+background:#ccc;
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+border-radius:4px;
+color:#131313;
+letter-spacing:.1em;
+line-height:1.5em;
+padding:3px 5px 1px;
+float: left
+}
+
+div#timelineContainer dl.timelineMinor {
+clear:both;
+margin:0 12px 0 0;
+padding:4px 4px 4px 0;
+/*position:relative;*/
+/* width:880px; */
+}
+
+div#timelineContainer .timelineMinor dt {
+background:url(../images/timeline_decade_tick.gif) left center no-repeat;
+clear:left;
+font-size:1.1em;
+list-style-type:none;
+line-height:1.1em;
+margin:15px 0 15px;
+padding:0 0 0 24px;
+white-space:nowrap;
+}
+
+div#timelineContainer .timelineMinor dt a {
+color:#999;
+cursor:pointer;
+font-size:1.1em;
+}
+
+div#timelineContainer .timelineMinor dt a.closed {
+color:#999;
+font-size:1.1em;
+margin-left:0;
+}
+
+div#timelineContainer .timelineMinor dt a.open {
+color:#7DBADF !important;
+font-weight: bold; 
+}
+
+div#timelineContainer .timelineMinor dt a:hover {
+color:#7DBADF !important;
+text-decoration: none !important;
+}
+
+div#timelineContainer .timelineMinor dd {
+padding-left:24px;
+/*width:100%;*/
+}
+
+div#timelineContainer .timelineMinor dd h3 {
+color:#FFF;
+clear:both;
+float:left;
+font-size:1.5em;
+margin:0;
+white-space:nowrap;
+}
+
+div#timelineContainer .timelineEvent div.event_content {
+clear:both;
+overflow: hidden;
+line-height:1.2em;
+margin:0 0 10px 25px;
+/* width:500px; */
+}
+
+
+div#timelineContainer .timelineEvent div.event_content img{
+-webkit-border-radius:6px;
+-moz-border-radius:6px;
+border-radius:6px;
+
+}
+
+
+div#timelineContainer .timelineEvent div.event_content .AhmetiDate{
+font-size: 16px;
+font-family: monospace;
+font-weight: bold;
+display: block;
+padding: 5px 0 5px;
+color: firebrick;
+}
+
+div#timelineContainer .timelineEvent h4 {
+clear:left;
+float:left;
+font-size:1.4em;
+font-weight:400;
+margin:10px 0 0;
+padding:0 0 0 20px;
+}
+
+div#timelineContainer .timelineEvent blockquote {
+border-left:2px solid #ccc;
+clear:left;
+float:left;
+font-size:1.8em;
+margin-left:0;
+padding:0 30px;
+/* width:400px; */
+}
+
+div#timelineContainer .timelineEvent blockquote .attribution{
+font-size:0.7em;
+text-align: right;
+}
+
+
+div#timelineContainer .timelineEvent div.media {
+float:right;
+padding:0 0 12px;
+/*width:300px;*/
+}
+
+div#timelineContainer .timelineEvent .media img {
+border:2px solid #000;
+margin:0;
+}
+
+div#timelineContainer .timelineEvent .media p {
+font-size:1.2em;
+margin:0;
+padding:0;
+}
+
+div#timelineContainer .timelineEvent .media a:link,.timelineEvent .media a:visited {
+color:#ab221b;
+}
+
+div#timelineContainer .timelineEvent .media a:hover {
+color:#7DBADF;
+}

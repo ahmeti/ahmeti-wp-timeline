@@ -26,18 +26,19 @@ if (!empty($_POST)){
         $event_date_is=true;
     }*/
 
-    
+    $event_date_is=null;
     if ($event_date != '0000-00-00' ){
         //it's ok 
         $event_date_is=true;
     }
     
-
+    $event_time_is=null;
     if(preg_match('/^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$/', $event_time)){ 
         //it's ok 
         $event_time_is=true;
     }
     
+    $event_bc_is=null;
     if ($event_bc > 0){
         //it's ok 
         $event_bc_is=true;
