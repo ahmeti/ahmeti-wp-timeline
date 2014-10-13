@@ -1,0 +1,24 @@
+/*
+* Timeliner.js
+* @version      1.5
+* @copyright    Tarek Anandan (http://www.technotarek.com)
+*/
+;(function(e){var t;e.timeliner=function(n){t=jQuery.extend({timelineContainer:"#timelineContainer",startState:"closed",startOpen:[],baseSpeed:150,speed:2,fontOpen:"1.1em",fontClosed:"1.1em",expandAllText:"+ Expand All",collapseAllText:"- Collapse All"},n);e(document).ready(function(){function n(n,r){e(n).removeClass("closed").addClass("open").animate({fontSize:t.fontOpen},t.baseSpeed);e(r).show(t.speed*t.baseSpeed)}function r(n,r){e(n).animate({fontSize:t.fontClosed},0).removeClass("open").addClass("closed");e(r).hide(t.speed*t.baseSpeed)}if(t.startState==="closed"){e(".timelineEvent").hide();e.each(e(t.startOpen),function(t,r){n(e(r).parent(".timelineMinor").find("dt a"),e(r))})}else{n(e(".timelineMinor dt a"),e(".timelineEvent"))}e(".timelineMinor dt").click(function(){var t=e(this).attr("id");if(e(this).find("a").is(".open")){r(e("a",this),e("#"+t+"EX"))}else{n(e("a",this),e("#"+t+"EX"))}});e(".timelineMajorMarker").click(function(){var t=e(this).parents(".timelineMajor").find(".timelineMinor").length;var i=e(this).parents(".timelineMajor").find(".open").length;if(t>i){n(e(this).parents(".timelineMajor").find("dt a","dl.timelineMinor"),e(this).parents(".timelineMajor").find(".timelineEvent"))}else{r(e(this).parents(".timelineMajor").find("dl.timelineMinor a"),e(this).parents(".timelineMajor").find(".timelineEvent"))}});e(".expandAll").click(function(){if(e(this).hasClass("expanded")){r(e(this).parents(t.timelineContainer).find("dt a","dl.timelineMinor"),e(this).parents(t.timelineContainer).find(".timelineEvent"));e(this).removeClass("expanded").html(t.expandAllText)}else{n(e(this).parents(t.timelineContainer).find("dt a","dl.timelineMinor"),e(this).parents(t.timelineContainer).find(".timelineEvent"));e(this).addClass("expanded").html(t.collapseAllText)}})})}})(jQuery);
+
+jQuery(document).ready(function() {
+
+    if (timelinerTimelinerJsObject.State === 'open'){
+        jQuery.timeliner({
+            expandAllText:timelinerTimelinerJsObject.ExpandAll,
+            collapseAllText:timelinerTimelinerJsObject.CollapseAll,
+            startState:'open'
+        });        
+    }else{
+        jQuery.timeliner({
+            expandAllText:timelinerTimelinerJsObject.ExpandAll,
+            collapseAllText:timelinerTimelinerJsObject.CollapseAll
+        });
+    }
+    // Colorbox Modal
+    jQuery(".CBmodal").colorbox({inline:true, initialWidth:100, maxWidth:682, initialHeight:100, transition:"elastic",speed:750});
+});

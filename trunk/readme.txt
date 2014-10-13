@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: wp timeline, timeline, zaman cizelgesi, ahmeti, zaman cizgisi
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 4.0
+Stable tag: 5.1
 License: GPLv2 or later (license.txt)
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ Yazdığınız olayların içine her türlü çoklu ortam (resim,video,mp3 vb.) 
  1. Shortcode öreneği: [ahmetiwptimeline groupid="1" sort="DESC" state="open"]
  1. Örnekler: sort="ASC" veya sort="DESC" / state="open" veya state="close"
 == Changelog ==
+
+= 5.1 =
+* Fixed show year
 
 = 5.0 =
 * Added date and time format templates for events

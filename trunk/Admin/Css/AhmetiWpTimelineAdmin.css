@@ -19,13 +19,8 @@
 .ahmetiwptablesSettings .ahmetiRow {display: block;padding: 3px;}
 .ahmetiwptablesSettings .dateformat {font-family: monospace;background-color: black;color: white;font-size: 12px;display: inline-block;padding: 3px}
 
-.ahmetiWpTimelineFooter {overflow: hidden;border: 1px solid #ddd}
-.ahmetiWpTimelineFooter .left {float: left;}
-.ahmetiWpTimelineFooter .left img {margin: 3px 5px 0 3px;border: 2px solid #bbb;
-            border-radius: 30px;
-            -moz-border-radius: 30px;
-            -khtml-border-radius: 30px;
-            -webkit-border-radius: 30px;}
+.ahmetiWpTimelineFooter {overflow: hidden;}
+
 .ahmetiWpTimelineFooter strong {font-weight: bold}
 .ahmetiWpTimelineFooter .footeradmindesc{font:14px Arial}
 

@@ -200,7 +200,12 @@ function AhmetiWpTimelineDateTitle($mysqlDateTime,$options)
         
     }else{
         // Y
-        return date( $options->DateFormatYear, strtotime($explDate[0]));
+        if ( empty($options->DateFormatYear) ){
+            return $explDate[0];
+        }else{
+            return date( $options->DateFormatYear, strtotime(($explDate[0]+1).'-00'));
+        }
+        
     }
 
 }
