@@ -61,7 +61,7 @@ class AhmetiWpTimelineAdmin
 
     public function menu()
     {
-        add_menu_page('Ahmeti Wp Timeline', 'Timeline', 'edit_pages', 'ahmeti-wp-timeline/index.php', 'Ahmeti_Wp_Timeline_Index', plugins_url('ahmeti-wp-timeline/images/ahmeti-wp-timeline-icon.png'), '6.9');
+        add_menu_page('Ahmeti Wp Timeline', 'Timeline', 'edit_pages', 'ahmeti-wp-timeline/index.php', [$this, 'routes'], plugins_url('ahmeti-wp-timeline/images/ahmeti-wp-timeline-icon.png'), '6.9');
     }
 
     public function enqueueScripts()
@@ -138,5 +138,70 @@ class AhmetiWpTimelineAdmin
         $buttons[] = 'ahmeti_wp_timeline_button';
 
         return $buttons;
+    }
+
+    public function header()
+    {
+        ?>
+        <div id="ahmeti_wrap" style="padding:10px">
+            <h1 style="font:oblique 30px/30px Georgia,serif; color:grey;background-image: url('<?php echo plugins_url(); ?>/ahmeti-wp-timeline/images/ahmeti-wp-timeline-logo.png');background-repeat: no-repeat;padding: 0 10px 10px 47px;background-position: 0 0;">Ahmeti WP Timeline <sup style="font-size: 14px">5.1</sup></h1>
+
+            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>"><?php echo _e('Group List', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=NewGroupForm"><?php echo _e('Add New Group', 'ahmeti-wp-timeline'); ?></a>
+            &nbsp;&nbsp;
+            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=EventList"><?php echo _e('Event List', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=NewEventForm"><?php echo _e('Add New Event', 'ahmeti-wp-timeline'); ?></a>
+            &nbsp;&nbsp;
+            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=EditSettingsForm"><?php echo _e('Settings', 'ahmeti-wp-timeline'); ?></a>
+            <br/><br/>
+        <?php
+    }
+
+    public function footer()
+    {
+        ?>
+            <br/><br/>
+            <div class="ahmetiWpTimelineFooter">
+                <div class="footeradmindesc">
+                    <span><?php echo _e('Developer', 'ahmeti-wp-timeline'); ?> : </span><a target="_blank" href="https://ahmeti.com.tr/"> Ahmet İmamoğlu</a> |
+                    <span><?php echo _e('Plug-in Wp Page', 'ahmeti-wp-timeline'); ?> : </span><a target="_blank" href="https://wordpress.org/plugins/ahmeti-wp-timeline/">https://wordpress.org/plugins/ahmeti-wp-timeline/</a>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function routes()
+    {
+        $this->header();
+
+        $page = isset($_GET['islem']) ? $_GET['islem'] : '';
+
+        $pages = [
+            'GroupList' => 'Admin/Group/GroupList.php',
+            'NewGroupForm' => 'Admin/Group/NewGroupForm.php',
+            'NewGroupPost' => 'Admin/Group/NewGroupPost.php',
+            'EditGroupForm' => 'Admin/Group/EditGroupForm.php',
+            'EditGroupPost' => 'Admin/Group/EditGroupPost.php',
+            'DeleteGroupPost' => 'Admin/Group/DeleteGroupPost.php',
+
+            'EventList' => 'Admin/Event/EventList.php',
+            'NewEventForm' => 'Admin/Event/NewEventForm.php',
+            'NewEventPost' => 'Admin/Event/NewEventPost.php',
+            'EditEventForm' => 'Admin/Event/EditEventForm.php',
+            'EditEventPost' => 'Admin/Event/EditEventPost.php',
+            'DeleteEventPost' => 'Admin/Event/DeleteEventPost.php',
+
+            'EditSettingsForm' => 'Admin/Settings/EditSettingsForm.php',
+            'EditSettingsPost' => 'Admin/Settings/EditSettingsPost.php',
+        ];
+
+        if (array_key_exists($page, $pages)) {
+            require_once $pages[$page];
+        } else {
+            require_once $pages['GroupList'];
+        }
+
+        $this->footer();
     }
 }
