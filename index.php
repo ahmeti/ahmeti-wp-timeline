@@ -33,16 +33,6 @@ require_once 'AhmetiWpTimelineFunction.php';
 // $ahmetiWpTimelineOpt->StartState = open
 // $ahmetiWpTimelineOpt->PageLimit = 20
 
-
-
-if (! is_admin()) {
-
-    // Wp User Head
-    add_action('wp_enqueue_scripts', 'Ahmeti_Wp_Timeline_Head');
-    add_shortcode('ahmetiwptimeline', 'AhmetiWpTimelineShortCodeOutput');
-
-}
-
 if (is_admin()) {
     include __DIR__.DIRECTORY_SEPARATOR.'AhmetiWpTimelineAdmin.php';
     new AhmetiWpTimelineAdmin;
