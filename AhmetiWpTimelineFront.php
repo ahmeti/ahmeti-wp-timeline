@@ -100,9 +100,9 @@ class AhmetiWpTimelineFront
 
             if ($row_group['timeline_bc'] < 0) {
                 $AhmetiYear = $row_group['timeline_bc'];
-            } elseif (AhmetiWpTimelineGetYear($row_group['timeline_date']) > 0) {
+            } elseif ($this->year($row_group['timeline_date']) > 0) {
                 // Sadece Yılı Al...
-                $AhmetiYear = AhmetiWpTimelineGetYear($row_group['timeline_date']);
+                $AhmetiYear = $this->year($row_group['timeline_date']);
             }
 
             if ($AhmetiYear == $AhmetiWpTimelineEndSqlYear) {
@@ -116,7 +116,7 @@ class AhmetiWpTimelineFront
 
                 // Tarih Detay
                 if ($AhmetiYear > 0) {
-                    $AhmetiWpTimelineOut .= '<span class="AhmetiDate">'.AhmetiWpTimelineDateTitle($row_group['timeline_date'], $ahmetiWpTimelineOpt).'</span>';
+                    $AhmetiWpTimelineOut .= '<span class="AhmetiDate">'.$this->dateTitle($row_group['timeline_date'], $ahmetiWpTimelineOpt).'</span>';
                 }
 
                 $AhmetiWpTimelineOut .= $row_group['event_content'].'</div><!-- event_content -->
@@ -149,7 +149,7 @@ class AhmetiWpTimelineFront
 
                 // Tarih Detay
                 if ($AhmetiYear > 0) {
-                    $AhmetiWpTimelineOut .= '<span class="AhmetiDate">'.AhmetiWpTimelineDateTitle($row_group['timeline_date'], $ahmetiWpTimelineOpt).'</span>';
+                    $AhmetiWpTimelineOut .= '<span class="AhmetiDate">'.$this->dateTitle($row_group['timeline_date'], $ahmetiWpTimelineOpt).'</span>';
                 }
 
                 $AhmetiWpTimelineOut .= $row_group['event_content'].'</div><!-- event_content -->
@@ -167,5 +167,59 @@ class AhmetiWpTimelineFront
         $AhmetiWpTimelineOut .= '</div><!-- /#timelineContainer -->';
 
         return $AhmetiWpTimelineOut;
+    }
+
+    public function dateTitle($mysqlDateTime, $options)
+    {
+        $explTime = explode(' ', $mysqlDateTime);
+        // $explTime[0] // 2012-12-12
+        // $explTime[1] // 00:00:00
+
+        $explDate = explode('-', $explTime[0]);
+        // $explDate[0] // Year
+        // $explDate[1] // Month
+        // $explDate[2] // Day
+
+        if ($explDate[2] > 0 && $explTime[1] != '00:00:00') {
+            // D-M-Y And H:i:s
+            if (empty($options->DateFormatYearMonthDay) || empty($options->DateFormatHourMinutesSecond)) {
+                return $mysqlDateTime;
+            } else {
+                return date($options->DateFormatYearMonthDay.' '.$options->DateFormatHourMinutesSecond, strtotime($mysqlDateTime));
+            }
+
+        } elseif ($explDate[2] > 0) {
+            // D-M-Y
+            if (empty($options->DateFormatYearMonthDay)) {
+                return $explTime[0];
+            } else {
+                return date($options->DateFormatYearMonthDay, strtotime($explDate[0].'-'.$explDate[1].'-'.$explDate[2]));
+            }
+
+        } elseif ($explDate[1] > 0) {
+            // M-Y
+            if (empty($options->DateFormatYearMonth)) {
+                return $explDate[0].'-'.$explDate[1];
+            } else {
+                return date($options->DateFormatYearMonth, strtotime($explDate[0].'-'.$explDate[1]));
+            }
+
+        } else {
+            // Y
+            if (empty($options->DateFormatYear)) {
+                return $explDate[0];
+            } else {
+                return date($options->DateFormatYear, strtotime(($explDate[0] + 1).'-00'));
+            }
+
+        }
+
+    }
+
+    public function year($mysqlDateTime)
+    {
+        $explDate = explode('-', $mysqlDateTime, 2);
+
+        return $explDate[0];
     }
 }
