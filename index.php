@@ -14,17 +14,17 @@
  *  Copyright 2014 Ahmet İmamoğlu ( ahmet@ahmeti.net )
  *
  *  LICENSE:
- * 
+ *
  *  Everyone is permitted to copy and distribute verbatim copies
  *  of this license document, but changing it is not allowed.
- * 
+ *
  */
 
-define('AHMETI_WP_TIMELINE_KONTROL',true);
+define('AHMETI_WP_TIMELINE_KONTROL', true);
 define('AHMETI_WP_TIMELINE_ADMIN_URL', admin_url().'admin.php?page=ahmeti-wp-timeline/index.php');
 
 global $wpdb;
-define('AHMETI_WP_TIMELINE_DB_PREFIX',$wpdb->prefix);
+define('AHMETI_WP_TIMELINE_DB_PREFIX', $wpdb->prefix);
 
 require_once 'AhmetiWpTimelineFunction.php';
 
@@ -32,7 +32,7 @@ require_once 'AhmetiWpTimelineFunction.php';
 // $ahmetiWpTimelineOpt->DefaultSort = ASC
 // $ahmetiWpTimelineOpt->StartState = open
 // $ahmetiWpTimelineOpt->PageLimit = 20
- 
+
 
 if ( isset($_GET['activate']) && @$_GET['activate'] == 'true' )
 {
@@ -43,20 +43,20 @@ if ( isset($_GET['activate']) && @$_GET['activate'] == 'true' )
 
 
 
-if (!is_admin()) {
-    
+if (! is_admin()) {
+
     // Wp User Head
     add_action('wp_enqueue_scripts', 'Ahmeti_Wp_Timeline_Head');
-    add_shortcode( 'ahmetiwptimeline', 'AhmetiWpTimelineShortCodeOutput' );
-    
-}else{
+    add_shortcode('ahmetiwptimeline', 'AhmetiWpTimelineShortCodeOutput');
+
+} else {
 
     // Admin Panel - Yonetim Paneli Olustur
     add_action('admin_menu', 'Ahmeti_Wp_Timeline_Admin');
-    
+
     // Add Editor Button Short Code
     new AhmetiWpTimelineAddEditorButton();
-} 
+}
 
 
 function Ahmeti_Wp_Timeline_Index(){   //ahmeti_index
@@ -64,61 +64,69 @@ function Ahmeti_Wp_Timeline_Index(){   //ahmeti_index
     require_once 'header.php';
 
     
-    /*      A C T I O N S     */
-    
+    /*      A C T I O N S */
+
     
     /* Group Actions */
-    if      (@$_GET['islem']=='NewGroupForm'){
+    if (@$_GET['islem'] == 'NewGroupForm') {
         require_once 'Admin/Group/NewGroupForm.php';
-        
-    }elseif (@$_GET['islem']=='NewGroupPost'){
+
+    } elseif (@$_GET['islem'] == 'NewGroupPost') {
         require_once 'Admin/Group/NewGroupPost.php';
-        
-    }elseif (@$_GET['islem']=='EditGroupForm'){
+
+    } elseif (@$_GET['islem'] == 'EditGroupForm') {
         require_once 'Admin/Group/EditGroupForm.php';
-        
-    }elseif (@$_GET['islem']=='EditGroupPost'){
+
+    } elseif (@$_GET['islem'] == 'EditGroupPost') {
         require_once 'Admin/Group/EditGroupPost.php';
-        
-    }elseif (@$_GET['islem']=='DeleteGroupPost'){
-        require_once 'Admin/Group/DeleteGroupPost.php';        
+
+    } elseif (@$_GET['islem'] == 'DeleteGroupPost') {
+        require_once 'Admin/Group/DeleteGroupPost.php';
 
         
         
-    /* Event Actions */
-    }elseif (@$_GET['islem'] == 'EventList'){
+        /* Event Actions */
+    } elseif (@$_GET['islem'] == 'EventList') {
         require_once 'Admin/Event/EventList.php';
-        
-    }elseif (@$_GET['islem']=='NewEventForm'){
+
+    } elseif (@$_GET['islem'] == 'NewEventForm') {
         require_once 'Admin/Event/NewEventForm.php';
-            
-    }elseif (@$_GET['islem']=='NewEventPost'){
+
+    } elseif (@$_GET['islem'] == 'NewEventPost') {
         require_once 'Admin/Event/NewEventPost.php';
 
-    }elseif (@$_GET['islem']=='EditEventForm'){
+    } elseif (@$_GET['islem'] == 'EditEventForm') {
         require_once 'Admin/Event/EditEventForm.php';
-        
-    }elseif (@$_GET['islem']=='EditEventPost'){
+
+    } elseif (@$_GET['islem'] == 'EditEventPost') {
         require_once 'Admin/Event/EditEventPost.php';
-        
-    }elseif (@$_GET['islem']=='DeleteEventPost'){
+
+    } elseif (@$_GET['islem'] == 'DeleteEventPost') {
         require_once 'Admin/Event/DeleteEventPost.php';
-    
+
         
         
-    /* Settings Action*/
-    }elseif (@$_GET['islem']=='EditSettingsForm'){
+        /* Settings Action */
+    } elseif (@$_GET['islem'] == 'EditSettingsForm') {
         require_once 'Admin/Settings/EditSettingsForm.php';
-    }elseif (@$_GET['islem']=='EditSettingsPost'){
+    } elseif (@$_GET['islem'] == 'EditSettingsPost') {
         require_once 'Admin/Settings/EditSettingsPost.php';
+
         
-        
-    /* Anasyafa */
-    }else{
+        /* Anasyafa */
+    } else {
         require_once 'Admin/Group/GroupList.php';
     }
 
     
     require_once 'footer.php';
+
 }
-?>
+
+if (is_admin()) {
+    include __DIR__.DIRECTORY_SEPARATOR.'AhmetiWpTimelineAdmin.php';
+    new AhmetiWpTimelineAdmin;
+} else {
+    include __DIR__.DIRECTORY_SEPARATOR.'AhmetiWpTimelineFront.php';
+    new AhmetiWpTimelineFront;
+}
