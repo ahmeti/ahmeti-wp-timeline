@@ -15,6 +15,8 @@ class AhmetiWpTimelineAdmin
         add_action('admin_menu', [$this, 'menu']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
+
+        add_action('admin_init', [$this, 'editorButton']);
     }
 
     public function install()
@@ -84,5 +86,57 @@ class AhmetiWpTimelineAdmin
         wp_enqueue_style('AhmetiWpTimelineAdminCss');
 
         // load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
+    }
+
+    public function editorButton()
+    {
+
+        if (! current_user_can('edit_posts')) {
+            return;
+        }
+
+        if (! current_user_can('edit_pages')) {
+            return;
+        }
+
+        global $wp_version;
+
+        if (version_compare($wp_version, '3.9', '<')) {
+            // Old TinyMce 3.0
+            add_filter('mce_buttons', [$this, 'filterEditorButtons']);
+            add_filter('mce_external_plugins', [$this, 'filterEditorPlugins']);
+        } else {
+            // New TinyMce 4.0
+            add_filter('mce_external_plugins', [$this, 'addEditorPlugin']);
+            add_filter('mce_buttons', [$this, 'registerEditorButton']);
+        }
+    }
+
+    public function filterEditorButtons($buttons)
+    {
+        array_push($buttons, '|', 'mygallery_button');
+
+        return $buttons;
+    }
+
+    public function filterEditorPlugins($plugins)
+    {
+        $plugins['mygallery'] = plugins_url().'/ahmeti-wp-timeline/Admin/Js/EditorButtonV3.js';
+
+        return $plugins;
+    }
+
+    public function addEditorPlugin($plugin_array)
+    {
+        $plugin_array['ahmeti_wp_timeline_button'] = plugins_url().'/ahmeti-wp-timeline/Admin/Js/EditorButtonV4.js';
+
+        return $plugin_array;
+    }
+
+    public function registerEditorButton($buttons)
+    {
+        $buttons[] = 'ahmeti_wp_timeline_button';
+
+        return $buttons;
     }
 }

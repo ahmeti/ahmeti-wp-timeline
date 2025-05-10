@@ -1,6 +1,6 @@
 (function() {
-    tinymce.PluginManager.add('my_mce_button', function(editor, url) {
-        editor.addButton('my_mce_button', {
+    tinymce.PluginManager.add('ahmeti_wp_timeline_button', function(editor, url) {
+        editor.addButton('ahmeti_wp_timeline_button', {
             text: false,
             icon: 'ahmeti-timeline-mce-icon',
             onclick: function() {
@@ -9,8 +9,8 @@
                     body: [
                         {
                             type: 'textbox',
-                            name: 'textboxName',
-                            label: 'Grup ID',
+                            name: 'timelineId',
+                            label: 'Timeline ID',
                             value: ''
                         },
                         {
@@ -18,8 +18,8 @@
                             name: 'sort',
                             label: 'Sort',
                             'values': [
-                                    {text: 'ASC', value: 'ASC'},
-                                    {text: 'DESC', value: 'DESC'}
+                                {text: 'ASC', value: 'ASC'},
+                                {text: 'DESC', value: 'DESC'}
                             ]
                         },
                         {
@@ -27,13 +27,13 @@
                             name: 'state',
                             label: 'State',
                             'values': [
-                                    {text: 'Collapse All', value: 'close'},
-                                    {text: 'Expand All', value: 'open'}
+                                {text: 'Collapse All', value: 'close'},
+                                {text: 'Expand All', value: 'open'}
                             ]
                         }
                     ],
                     onsubmit: function(e) {
-                        editor.insertContent('[ahmetiwptimeline groupid="' + e.data.textboxName + '" sort="'+e.data.sort+'" state="'+e.data.state+'"]');
+                        editor.insertContent('[ahmetiwptimeline groupid="' + e.data.timelineId + '" sort="'+e.data.sort+'" state="'+e.data.state+'"]');
                     }
                 });
             }

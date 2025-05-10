@@ -41,9 +41,6 @@ if (! is_admin()) {
     add_action('wp_enqueue_scripts', 'Ahmeti_Wp_Timeline_Head');
     add_shortcode('ahmetiwptimeline', 'AhmetiWpTimelineShortCodeOutput');
 
-} else {
-    // Add Editor Button Short Code
-    new AhmetiWpTimelineAddEditorButton();
 }
 
 
