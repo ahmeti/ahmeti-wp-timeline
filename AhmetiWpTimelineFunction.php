@@ -11,35 +11,6 @@
 
 if(!defined('AHMETI_WP_TIMELINE_KONTROL')){ echo 'Bu dosyaya erşiminiz engellendi.'; exit(); }
 
-function Ahmeti_Wp_Timeline_Admin_Head()
-{
-    /* Wp Admin Head */
-
-    load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
-
-    wp_enqueue_script('jquery');
-
-    /* Datepicker */
-    if (@$_GET['islem']=='NewEventForm' || @$_GET['islem']=='EditEventForm' || @$_GET['islem']=='EventList'){
-        wp_enqueue_script('jquery-ui-datepicker');
-        wp_register_style( 'AhmetiWpTimelineAdminJqueryUi', plugins_url().'/ahmeti-wp-timeline/Admin/Css/smoothness/jquery-ui-1.10.3.custom.min.css',array(),'','screen' );
-        wp_enqueue_style( 'AhmetiWpTimelineAdminJqueryUi' );
-    }
-
-    wp_register_script('AhmetiWpTimelineAdminJs', plugins_url().'/ahmeti-wp-timeline/Admin/Js/AhmetiWpTimelineAdmin.js', array( 'jquery' ));
-    wp_enqueue_script('AhmetiWpTimelineAdminJs');
-
-    /* Start Add Js Variables */
-    $JsData = array('pluginUrl' => plugins_url().'/ahmeti-wp-timeline/' ,'pluginAdminUrl' => AHMETI_WP_TIMELINE_ADMIN_URL);
-    wp_localize_script('AhmetiWpTimelineAdminJs', 'AhmetiWpTimelineJsData', $JsData);
-    /* End Add Js Variables */
-
-    wp_register_style( 'AhmetiWpTimelineAdminCss', plugins_url().'/ahmeti-wp-timeline/Admin/Css/AhmetiWpTimelineAdmin.css',array(),'','screen' );
-    wp_enqueue_style( 'AhmetiWpTimelineAdminCss' );
-}
-
-
-
 function Ahmeti_Wp_Timeline_Head()
 {
 
@@ -89,16 +60,6 @@ function Ahmeti_Wp_Timeline_Head()
     wp_register_style( 'timelinerScreenCss', plugins_url().'/ahmeti-wp-timeline/TimelinerJquery/css/screen.css',array(),'','screen' );
     wp_enqueue_style( 'timelinerScreenCss' );
 
-}
-
-
-
-function Ahmeti_Wp_Timeline_Admin()
-{
-    /* Admin Menü */
-    add_action('admin_enqueue_scripts', 'Ahmeti_Wp_Timeline_Admin_Head');
-    add_menu_page( 'Ahmeti Wp Timeline', 'Timeline', 'edit_pages', 'ahmeti-wp-timeline/index.php', 'Ahmeti_Wp_Timeline_Index', plugins_url('ahmeti-wp-timeline/images/ahmeti-wp-timeline-icon.png') , '6.9');
-    //load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
 }
 
 

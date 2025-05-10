@@ -42,10 +42,6 @@ if (! is_admin()) {
     add_shortcode('ahmetiwptimeline', 'AhmetiWpTimelineShortCodeOutput');
 
 } else {
-
-    // Admin Panel - Yonetim Paneli Olustur
-    add_action('admin_menu', 'Ahmeti_Wp_Timeline_Admin');
-
     // Add Editor Button Short Code
     new AhmetiWpTimelineAddEditorButton();
 }
