@@ -5,7 +5,7 @@
 global $wpdb;
 
 /* OPTIONS*/
-$ahmetiWpTimelineOpt=json_decode(get_option('AhmetiWpTimelineOptions'));
+$ahmetiWpTimelineOpt=json_decode(get_option('ahmeti_wp_timeline_options'));
 
 /* Sayfalama İçin */
 $page=@$_GET['is_page'];
@@ -57,7 +57,7 @@ if($toplam_sayfa > 0){
             </td>
             <td style="padding: 5px;border: 1px solid #ddd;">
                 <a onclick="return confirm('<?php echo _e('Events belonging to the group will also be deleted. Are you sure you want to delete this group?','ahmeti-wp-timeline'); ?>')" href="<?php echo AHMETI_WP_TIMELINE_ADMIN_URL; ?>&islem=DeleteGroupPost&group_id=<?php echo $group_name['group_id']; ?>"><img style="width: 20px" src="<?php echo plugins_url().'/ahmeti-wp-timeline/images/delete.png'; ?>" /></a>
-            </td>            
+            </td>
 
         </tr>
         <?php
@@ -66,10 +66,10 @@ if($toplam_sayfa > 0){
         ?>
     </table>
 
-    <?php            
+    <?php
 
-        
-        AhmetiWpTimelineSayfala(AHMETI_WP_TIMELINE_ADMIN_URL,$toplam_sayfa,$page,$page_limit,'&islem=GroupList');
+
+    AhmetiWpTimelineAdmin::pagination(AHMETI_WP_TIMELINE_ADMIN_URL,$toplam_sayfa,$page,$page_limit,'&islem=GroupList');
 
 }else{
     // Söz yok ise uyarı mesajı ver.

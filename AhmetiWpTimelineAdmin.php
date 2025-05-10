@@ -204,4 +204,50 @@ class AhmetiWpTimelineAdmin
 
         $this->footer();
     }
+
+    public static function pagination($site_url, $top_sayfa, $page, $limit, $page_url)
+    {
+        if ($top_sayfa > $limit) {
+
+            echo '<div id="sayfala"><span class="say_sabit">'.__('Pages', 'ahmeti-wp-timeline').'</span>';
+
+            $x = 5; // Aktif sayfadan önceki/sonraki sayfa gösterim sayisi
+            $lastP = ceil($top_sayfa / $limit);
+
+            // sayfa 1'i yazdir
+            if ($page == 1) {
+                echo '<span class="say_aktif">1</span>';
+            } else {
+                echo '<a class="say_a" href="'.$site_url.''.$page_url.'">1</a>';
+            }
+
+            // "..." veya direkt 2
+            if ($page - $x > 2) {
+                echo '<span class="say_b">...</span>';
+                $i = $page - $x;
+            } else {
+                $i = 2;
+            }
+            // +/- $x sayfalari yazdir
+            for ($i; $i <= $page + $x; $i++) {
+                if ($i == $page) {
+                    echo '<span class="say_aktif">'.$i.'</span>';
+                } else {
+                    echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$i.'">'.$i.'</a>';
+                }
+                if ($i == $lastP) {
+                    break;
+                }
+            }
+
+            // "..." veya son sayfa
+            if ($page + $x < $lastP - 1) {
+                echo '<span class="say_b">...</span>';
+                echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
+            } elseif ($page + $x == $lastP - 1) {
+                echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
+            }
+            echo '</div>'; // #sayfala
+        }
+    }
 }
