@@ -34,14 +34,6 @@ require_once 'AhmetiWpTimelineFunction.php';
 // $ahmetiWpTimelineOpt->PageLimit = 20
 
 
-if ( isset($_GET['activate']) && @$_GET['activate'] == 'true' )
-{
-    // Eğer kullanıcı "Etkinleştir" bağlantısına tıkladıysa, fonksiyonunu çağır
-    /* Kurulum */
-    add_action('init', 'Ahmeti_Wp_Timeline_Kurulum');
-}
-
-
 
 if (! is_admin()) {
 
