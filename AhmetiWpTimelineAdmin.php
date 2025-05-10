@@ -25,7 +25,7 @@ class AhmetiWpTimelineAdmin
                 `event_id` bigint(20) NOT NULL AUTO_INCREMENT,
                 `group_id` smallint(6) NOT NULL DEFAULT '0',
                 `timeline_bc` bigint(20) DEFAULT '0',
-                `timeline_date` datetime DEFAULT '0000-00-00 00:00:00',
+                `timeline_date` datetime DEFAULT NULL,
                 `title` varchar(255) DEFAULT NULL,
                 `event_content` mediumtext,
                 `type` enum('event','group_name') NOT NULL DEFAULT 'event',
