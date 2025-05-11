@@ -1,6 +1,6 @@
 <?php
 
-class AhmetiWpTimelineTimeline
+class AhmetiWptTimeline
 {
     public static function index()
     {
@@ -39,9 +39,8 @@ class AhmetiWpTimelineTimeline
                     <th><?php echo _e('Name', 'ahmeti-wp-timeline'); ?></th>
                     <th><?php echo _e('Count Events', 'ahmeti-wp-timeline'); ?></th>
                 </tr>
-                <?php
-                $nonce = wp_create_nonce('awt_timeline_delete');
-            foreach ($timelines as $timeline) { ?>
+                <?php foreach ($timelines as $timeline) {
+                    $nonce = wp_create_nonce('awt_timeline_delete_'.$timeline->group_id); ?>
                     <tr>
                         <td>
                             <?php echo $timeline->group_id; ?>
@@ -178,7 +177,7 @@ class AhmetiWpTimelineTimeline
 
         $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 
-        if (! isset($_GET['_wpnonce']) || ! wp_verify_nonce($_GET['_wpnonce'], 'awt_timeline_delete')) {
+        if (! isset($_GET['_wpnonce']) || ! wp_verify_nonce($_GET['_wpnonce'], 'awt_timeline_delete_'.$id)) {
             ?><div class="alert-danger"><?php echo _e('Sorry, your nonce did not verify.', 'ahmeti-wp-timeline'); ?></div><?php
             return;
         }
