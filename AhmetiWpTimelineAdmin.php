@@ -57,7 +57,7 @@ class AhmetiWpTimelineAdmin
 
     public function menu()
     {
-        add_menu_page('Ahmeti Wp Timeline', 'Timeline', 'edit_pages', 'ahmeti-wp-timeline/index.php', [$this, 'routes'], plugins_url('ahmeti-wp-timeline/images/ahmeti-wp-timeline-icon.png'), '6.9');
+        add_menu_page('Ahmeti Wp Timeline', 'Timeline', 'edit_pages', 'ahmeti-wp-timeline/index.php', [$this, 'routes'], plugins_url('ahmeti-wp-timeline/images/icon.png'), '6.9');
     }
 
     public function enqueueScripts()
@@ -66,19 +66,14 @@ class AhmetiWpTimelineAdmin
 
         wp_enqueue_script('jquery');
 
-        /* Datepicker */
-        wp_enqueue_script('jquery-ui-datepicker');
-        wp_register_style('AhmetiWpTimelineAdminJqueryUi', plugins_url().'/ahmeti-wp-timeline/Admin/Css/smoothness/jquery-ui-1.10.3.custom.min.css', [], '', 'screen');
-        wp_enqueue_style('AhmetiWpTimelineAdminJqueryUi');
-
-        wp_register_script('AhmetiWpTimelineAdminJs', plugins_url().'/ahmeti-wp-timeline/Admin/Js/AhmetiWpTimelineAdmin.js', ['jquery']);
-        wp_enqueue_script('AhmetiWpTimelineAdminJs');
+        // wp_register_script('AhmetiWpTimelineAdminJs', plugins_url().'/ahmeti-wp-timeline/Admin/Js/AhmetiWpTimelineAdmin.js', ['jquery']);
+        // wp_enqueue_script('AhmetiWpTimelineAdminJs');
 
         /* Start to Add Js Variables */
         $JsData = ['pluginUrl' => plugins_url().'/ahmeti-wp-timeline/', 'pluginAdminUrl' => self::url()];
         wp_localize_script('AhmetiWpTimelineAdminJs', 'AhmetiWpTimelineJsData', $JsData);
 
-        wp_register_style('AhmetiWpTimelineAdminCss', plugins_url().'/ahmeti-wp-timeline/Admin/Css/AhmetiWpTimelineAdmin.css', [], '', 'screen');
+        wp_register_style('AhmetiWpTimelineAdminCss', plugins_url().'/ahmeti-wp-timeline/Admin/Css/AhmetiWpTimelineAdmin.css');
         wp_enqueue_style('AhmetiWpTimelineAdminCss');
 
         // load_plugin_textdomain('ahmeti-wp-timeline', FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
@@ -86,7 +81,6 @@ class AhmetiWpTimelineAdmin
 
     public function editorButton()
     {
-
         if (! current_user_can('edit_posts')) {
             return;
         }
@@ -145,10 +139,10 @@ class AhmetiWpTimelineAdmin
             <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=TimelineIndex"><?php echo _e('Timeline List', 'ahmeti-wp-timeline'); ?></a>
             <a style="margin-right:30px;" class="button" href="<?php echo self::url(); ?>&islem=TimelineCreate"><?php echo _e('New Timeline', 'ahmeti-wp-timeline'); ?></a>
 
-            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=EventList"><?php echo _e('Event List', 'ahmeti-wp-timeline'); ?></a>
-            <a style="margin-right:30px;" class="button" href="<?php echo self::url(); ?>&islem=NewEventForm"><?php echo _e('Add New Event', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=EventIndex"><?php echo _e('Event List', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:30px;" class="button" href="<?php echo self::url(); ?>&islem=EventCreate"><?php echo _e('Add New Event', 'ahmeti-wp-timeline'); ?></a>
 
-            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=EditSettingsForm"><?php echo _e('Settings', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=SettingEdit"><?php echo _e('Settings', 'ahmeti-wp-timeline'); ?></a>
         <?php
     }
 
@@ -166,35 +160,31 @@ class AhmetiWpTimelineAdmin
         $page = isset($_GET['islem']) ? $_GET['islem'] : '';
 
         $pages = [
-            'TimelineIndex' => ['Admin/AhmetiWpTimelineTimeline', 'index'],
-            'TimelineCreate' => ['Admin/AhmetiWpTimelineTimeline', 'create'],
-            'TimelineStore' => ['Admin/AhmetiWpTimelineTimeline', 'store'],
-            'TimelineEdit' => ['Admin/AhmetiWpTimelineTimeline', 'edit'],
-            'TimelineUpdate' => ['Admin/AhmetiWpTimelineTimeline', 'update'],
-            'TimelineDelete' => ['Admin/AhmetiWpTimelineTimeline', 'delete'],
+            'TimelineIndex' => ['Admin/AhmetiWptTimeline', 'index'],
+            'TimelineCreate' => ['Admin/AhmetiWptTimeline', 'create'],
+            'TimelineStore' => ['Admin/AhmetiWptTimeline', 'store'],
+            'TimelineEdit' => ['Admin/AhmetiWptTimeline', 'edit'],
+            'TimelineUpdate' => ['Admin/AhmetiWptTimeline', 'update'],
+            'TimelineDelete' => ['Admin/AhmetiWptTimeline', 'delete'],
 
-            'EventList' => 'Admin/Event/EventList.php',
-            'NewEventForm' => 'Admin/Event/NewEventForm.php',
-            'NewEventPost' => 'Admin/Event/NewEventPost.php',
-            'EditEventForm' => 'Admin/Event/EditEventForm.php',
-            'EditEventPost' => 'Admin/Event/EditEventPost.php',
-            'DeleteEventPost' => 'Admin/Event/DeleteEventPost.php',
+            'EventIndex' => ['Admin/AhmetiWptEvent', 'index'],
+            'EventCreate' => ['Admin/AhmetiWptEvent', 'create'],
+            'EventStore' => ['Admin/AhmetiWptEvent', 'store'],
+            'EventEdit' => ['Admin/AhmetiWptEvent', 'edit'],
+            'EventUpdate' => ['Admin/AhmetiWptEvent', 'update'],
+            'EventDelete' => ['Admin/AhmetiWptEvent', 'delete'],
 
-            'EditSettingsForm' => 'Admin/Settings/EditSettingsForm.php',
-            'EditSettingsPost' => 'Admin/Settings/EditSettingsPost.php',
+            'SettingEdit' => ['Admin/AhmetiWptSetting', 'edit'],
+            'SettingUpdate' => ['Admin/AhmetiWptSetting', 'update'],
         ];
 
-        if (array_key_exists($page, $pages)) {
-            if (is_array($pages[$page])) {
-                $route = $pages[$page];
-                include $route[0].'.php';
-                call_user_func([basename($route[0]), $route[1]], []);
-            } else {
-                require_once $pages[$page];
-            }
-        } else {
-            require_once $pages['GroupList'];
+        if (! array_key_exists($page, $pages)) {
+            $page = 'TimelineIndex';
         }
+
+        $route = $pages[$page];
+        include $route[0].'.php';
+        call_user_func([basename($route[0]), $route[1]], []);
 
         $this->footer();
     }
@@ -232,49 +222,55 @@ class AhmetiWpTimelineAdmin
         return $wpdb->prefix.'ahmeti_wp_timeline';
     }
 
-    public static function pagination($site_url, $top_sayfa, $page, $limit, $page_url)
+    public static function pagination($siteUrl, $total, $page, $limit, $page_url)
     {
-        if ($top_sayfa > $limit) {
+        if ($total > $limit) {
 
-            echo '<div id="sayfala"><span class="say_sabit">'.__('Pages', 'ahmeti-wp-timeline').'</span>';
+            echo '<div id="pagination"><span class="page-title">'.__('Pages', 'ahmeti-wp-timeline').'</span>';
 
-            $x = 5; // Aktif sayfadan önceki/sonraki sayfa gösterim sayisi
-            $lastP = ceil($top_sayfa / $limit);
+            $x = 5;
+            $lastP = ceil($total / $limit);
 
-            // sayfa 1'i yazdir
             if ($page == 1) {
-                echo '<span class="say_aktif">1</span>';
+                echo '<span class="page-active">1</span>';
             } else {
-                echo '<a class="say_a" href="'.$site_url.''.$page_url.'">1</a>';
+                echo '<a class="page-a" href="'.$siteUrl.$page_url.'">1</a>';
             }
 
-            // "..." veya direkt 2
             if ($page - $x > 2) {
-                echo '<span class="say_b">...</span>';
-                $i = $page - $x;
+                echo '<span class="page-b">...</span>';
+                $ii = $page - $x;
             } else {
-                $i = 2;
+                $ii = 2;
             }
-            // +/- $x sayfalari yazdir
-            for ($i; $i <= $page + $x; $i++) {
+
+            for ($i = $ii; $i <= $page + $x; $i++) {
                 if ($i == $page) {
-                    echo '<span class="say_aktif">'.$i.'</span>';
+                    echo '<span class="page-active">'.$i.'</span>';
                 } else {
-                    echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$i.'">'.$i.'</a>';
+                    echo '<a class="page-a" href="'.$siteUrl.$page_url.'&is_page='.$i.'">'.$i.'</a>';
                 }
                 if ($i == $lastP) {
                     break;
                 }
             }
 
-            // "..." veya son sayfa
             if ($page + $x < $lastP - 1) {
-                echo '<span class="say_b">...</span>';
-                echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
+                echo '<span class="page-b">...</span>';
+                echo '<a class="page-a" href="'.$siteUrl.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
             } elseif ($page + $x == $lastP - 1) {
-                echo '<a class="say_a" href="'.$site_url.''.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
+                echo '<a class="page-a" href="'.$siteUrl.$page_url.'&is_page='.$lastP.'">'.$lastP.'</a>';
             }
-            echo '</div>'; // #sayfala
+            echo '</div>';
         }
+    }
+
+    public static function getTimelines()
+    {
+        global $wpdb;
+
+        $prepare = $wpdb->prepare('SELECT `group_id`, `title` FROM '.AhmetiWpTimelineAdmin::table().' WHERE type = %s ORDER BY title ASC', 'group_name');
+
+        return $wpdb->get_results($prepare);
     }
 }
