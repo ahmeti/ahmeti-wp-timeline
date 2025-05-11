@@ -140,9 +140,9 @@ class AhmetiWpTimelineAdmin
     {
         ?>
         <div id="ahmeti-wp-timeline">
-            <h1 style="font:oblique 30px/30px Georgia,serif; color:grey;background-image: url('<?php echo plugins_url(); ?>/ahmeti-wp-timeline/images/ahmeti-wp-timeline-logo.png');background-repeat: no-repeat;padding: 0 10px 10px 47px;background-position: 0 0;">Ahmeti WP Timeline <sup style="font-size: 14px">5.1</sup></h1>
+            <h1 class="slogan">Ahmeti WP Timeline <sup>6.0</sup></h1>
 
-            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>"><?php echo _e('Timeline List', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=TimelineIndex"><?php echo _e('Timeline List', 'ahmeti-wp-timeline'); ?></a>
             <a style="margin-right:30px;" class="button" href="<?php echo self::url(); ?>&islem=TimelineCreate"><?php echo _e('New Timeline', 'ahmeti-wp-timeline'); ?></a>
 
             <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=EventList"><?php echo _e('Event List', 'ahmeti-wp-timeline'); ?></a>
@@ -155,13 +155,6 @@ class AhmetiWpTimelineAdmin
     public function footer()
     {
         ?>
-            <br/><br/>
-            <div class="ahmetiWpTimelineFooter">
-                <div class="footeradmindesc">
-                    <span><?php echo _e('Developer', 'ahmeti-wp-timeline'); ?> : </span><a target="_blank" href="https://ahmeti.com.tr/"> Ahmet İmamoğlu</a> |
-                    <span><?php echo _e('Plug-in Wp Page', 'ahmeti-wp-timeline'); ?> : </span><a target="_blank" href="https://wordpress.org/plugins/ahmeti-wp-timeline/">https://wordpress.org/plugins/ahmeti-wp-timeline/</a>
-                </div>
-            </div>
         </div>
         <?php
     }
@@ -173,12 +166,12 @@ class AhmetiWpTimelineAdmin
         $page = isset($_GET['islem']) ? $_GET['islem'] : '';
 
         $pages = [
-            'GroupList' => 'Admin/Group/GroupList.php',
-            'NewGroupForm' => 'Admin/Group/NewGroupForm.php',
-            'NewGroupPost' => 'Admin/Group/NewGroupPost.php',
-            'EditGroupForm' => 'Admin/Group/EditGroupForm.php',
-            'EditGroupPost' => 'Admin/Group/EditGroupPost.php',
-            'DeleteGroupPost' => 'Admin/Group/DeleteGroupPost.php',
+            'TimelineIndex' => ['Admin/AhmetiWpTimelineTimeline', 'index'],
+            'TimelineCreate' => ['Admin/AhmetiWpTimelineTimeline', 'create'],
+            'TimelineStore' => ['Admin/AhmetiWpTimelineTimeline', 'store'],
+            'TimelineEdit' => ['Admin/AhmetiWpTimelineTimeline', 'edit'],
+            'TimelineUpdate' => ['Admin/AhmetiWpTimelineTimeline', 'update'],
+            'TimelineDelete' => ['Admin/AhmetiWpTimelineTimeline', 'delete'],
 
             'EventList' => 'Admin/Event/EventList.php',
             'NewEventForm' => 'Admin/Event/NewEventForm.php',
@@ -192,12 +185,39 @@ class AhmetiWpTimelineAdmin
         ];
 
         if (array_key_exists($page, $pages)) {
-            require_once $pages[$page];
+            if (is_array($pages[$page])) {
+                $route = $pages[$page];
+                include $route[0].'.php';
+                call_user_func([basename($route[0]), $route[1]], []);
+            } else {
+                require_once $pages[$page];
+            }
         } else {
             require_once $pages['GroupList'];
         }
 
         $this->footer();
+    }
+
+    public static function options($key = null)
+    {
+        $options = json_decode(get_option('ahmeti_wp_timeline_options'), true);
+
+        $options = (object) array_merge([
+            'DefaultSort' => 'ASC',
+            'StartState' => 'close',
+            'PageLimit' => '20',
+            'DateFormatYear' => 'Y',
+            'DateFormatYearMonth' => 'm.Y',
+            'DateFormatYearMonthDay' => 'd.m.Y',
+            'DateFormatHourMinutesSecond' => 'H:i:s',
+        ], $options);
+
+        if ($key && isset($options->$key)) {
+            return $options->$key;
+        }
+
+        return $options;
     }
 
     public static function url()

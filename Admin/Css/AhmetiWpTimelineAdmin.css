@@ -1,17 +1,3 @@
-/* 
-    Document   : Ahmeti_Wp_Timeline_Admin_Css
-    Created on : 17.Ağu.2013, 19:32:43
-    Author     : ahmet
-    Description: ahmeti.net
-*/
-
-/* ADMIN */
-.miniLangEn {color:#C00;font-size: 10px !important;font-weight: normal;}
-
-.ahmetiwptablestd {border-spacing: 0;border-collapse: collapse;width: 100%;font-family: Arial}
-.ahmetiwptablestd th {border: 1px solid #ddd;text-align: left;background-color: #eee}
-.ahmetiwptablestd td {border: 1px solid #ddd;background-color: white}
-
 .ahmetiwptablesSettings {width: inherit}
 .ahmetiwptablesSettings th {border: 1px solid #ddd;padding: 5px; text-align: right;width: 200px}
 .ahmetiwptablesSettings td {border: 1px solid #ddd;padding: 5px;width: 500px}
@@ -26,4 +12,63 @@
 
 i.mce-i-ahmeti-timeline-mce-icon {
     background-image: url('../../images/ahmeti-wp-timeline-button.png');
+}
+
+#ahmeti-wp-timeline {
+    padding: 10px 20px 10px 0;
+}
+
+#ahmeti-wp-timeline .slogan{
+    font-family:Georgia,Arial,serif;
+    font-size: 30px;
+    color:grey;
+    background-image: url('../../images/ahmeti-wp-timeline-logo.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    padding: 2px 10px 10px 46px;
+}
+
+#ahmeti-wp-timeline .slogan sup{
+    font-size: 14px;
+}
+
+#ahmeti-wp-timeline h2.page-title {
+    line-height: 1.5;
+    border-bottom: 1px solid #ddd;
+}
+
+#ahmeti-wp-timeline div.alert-danger {
+    background-color: #ff6666;
+    border: 1px solid #ff3333;
+    padding: 10px;
+    font-size: 13px;
+    color: #ffffff;
+}
+
+#ahmeti-wp-timeline div.alert-success {
+    background-color:#006633;
+    border: 1px solid #003300;
+    padding: 10px;
+    font-size: 13px;
+    color: #ffffff;
+}
+
+#ahmeti-wp-timeline .table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#ahmeti-wp-timeline .table th {
+    border: 1px solid #ddd;
+    background-color: #eee;
+    padding: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#ahmeti-wp-timeline .table td {
+    border: 1px solid #ddd;
+    background-color: white;
+    padding: 5px;
 }
