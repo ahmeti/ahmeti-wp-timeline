@@ -1,34 +1,18 @@
-.ahmetiwptablesSettings {width: inherit}
-.ahmetiwptablesSettings th {border: 1px solid #ddd;padding: 5px; text-align: right;width: 200px}
-.ahmetiwptablesSettings td {border: 1px solid #ddd;padding: 5px;width: 500px}
-
-.ahmetiwptablesSettings .ahmetiRow {display: block;padding: 3px;}
-.ahmetiwptablesSettings .dateformat {font-family: monospace;background-color: black;color: white;font-size: 12px;display: inline-block;padding: 3px}
-
-.ahmetiWpTimelineFooter {overflow: hidden;}
-
-.ahmetiWpTimelineFooter strong {font-weight: bold}
-.ahmetiWpTimelineFooter .footeradmindesc{font:14px Arial}
-
-i.mce-i-ahmeti-timeline-mce-icon {
-    background-image: url('../../images/ahmeti-wp-timeline-button.png');
-}
-
 #ahmeti-wp-timeline {
     padding: 10px 20px 10px 0;
 }
 
-#ahmeti-wp-timeline .slogan{
-    font-family:Georgia,Arial,serif;
+#ahmeti-wp-timeline .slogan {
+    font-family: Georgia, Arial, serif;
     font-size: 30px;
-    color:grey;
-    background-image: url('../../images/ahmeti-wp-timeline-logo.png');
+    color: grey;
+    background-image: url('../../images/logo.png');
     background-repeat: no-repeat;
     background-position: 0 0;
     padding: 2px 10px 10px 46px;
 }
 
-#ahmeti-wp-timeline .slogan sup{
+#ahmeti-wp-timeline .slogan sup {
     font-size: 14px;
 }
 
@@ -46,7 +30,7 @@ i.mce-i-ahmeti-timeline-mce-icon {
 }
 
 #ahmeti-wp-timeline div.alert-success {
-    background-color:#006633;
+    background-color: #006633;
     border: 1px solid #003300;
     padding: 10px;
     font-size: 13px;
@@ -71,4 +55,17 @@ i.mce-i-ahmeti-timeline-mce-icon {
     border: 1px solid #ddd;
     background-color: white;
     padding: 5px;
+}
+
+#ahmeti-wp-timeline .row {
+    margin-bottom: 20px;
+}
+
+#ahmeti-wp-timeline .row label {
+    display: block;
+    font-weight: bold;
+}
+
+i.mce-i-ahmeti-timeline-mce-icon {
+    background-image: url('../../images/logo.png');
 }
