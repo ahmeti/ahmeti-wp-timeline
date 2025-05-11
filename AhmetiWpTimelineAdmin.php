@@ -2,12 +2,8 @@
 
 class AhmetiWpTimelineAdmin
 {
-    private $url;
-
     public function __construct()
     {
-        $this->url = admin_url().'admin.php?page=ahmeti-wp-timeline/index.php';
-
         if (isset($_GET['activate']) && $_GET['activate'] === 'true') {
             add_action('init', [$this, 'install']);
         }
@@ -23,7 +19,7 @@ class AhmetiWpTimelineAdmin
     {
         global $wpdb;
 
-        $table = $wpdb->prefix.'ahmeti_wp_timeline';
+        $table = self::table();
 
         $tables = $wpdb->get_results('SHOW TABLES FROM '.DB_NAME, ARRAY_N);
         $tables = array_map(function ($table) {
@@ -79,7 +75,7 @@ class AhmetiWpTimelineAdmin
         wp_enqueue_script('AhmetiWpTimelineAdminJs');
 
         /* Start to Add Js Variables */
-        $JsData = ['pluginUrl' => plugins_url().'/ahmeti-wp-timeline/', 'pluginAdminUrl' => $this->url];
+        $JsData = ['pluginUrl' => plugins_url().'/ahmeti-wp-timeline/', 'pluginAdminUrl' => self::url()];
         wp_localize_script('AhmetiWpTimelineAdminJs', 'AhmetiWpTimelineJsData', $JsData);
 
         wp_register_style('AhmetiWpTimelineAdminCss', plugins_url().'/ahmeti-wp-timeline/Admin/Css/AhmetiWpTimelineAdmin.css', [], '', 'screen');
@@ -143,17 +139,16 @@ class AhmetiWpTimelineAdmin
     public function header()
     {
         ?>
-        <div id="ahmeti_wrap" style="padding:10px">
+        <div id="ahmeti-wp-timeline">
             <h1 style="font:oblique 30px/30px Georgia,serif; color:grey;background-image: url('<?php echo plugins_url(); ?>/ahmeti-wp-timeline/images/ahmeti-wp-timeline-logo.png');background-repeat: no-repeat;padding: 0 10px 10px 47px;background-position: 0 0;">Ahmeti WP Timeline <sup style="font-size: 14px">5.1</sup></h1>
 
-            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>"><?php echo _e('Group List', 'ahmeti-wp-timeline'); ?></a>
-            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=NewGroupForm"><?php echo _e('Add New Group', 'ahmeti-wp-timeline'); ?></a>
-            &nbsp;&nbsp;
-            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=EventList"><?php echo _e('Event List', 'ahmeti-wp-timeline'); ?></a>
-            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=NewEventForm"><?php echo _e('Add New Event', 'ahmeti-wp-timeline'); ?></a>
-            &nbsp;&nbsp;
-            <a style="margin-right:15px;" class="button" href="<?php echo $this->url; ?>&islem=EditSettingsForm"><?php echo _e('Settings', 'ahmeti-wp-timeline'); ?></a>
-            <br/><br/>
+            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>"><?php echo _e('Timeline List', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:30px;" class="button" href="<?php echo self::url(); ?>&islem=TimelineCreate"><?php echo _e('New Timeline', 'ahmeti-wp-timeline'); ?></a>
+
+            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=EventList"><?php echo _e('Event List', 'ahmeti-wp-timeline'); ?></a>
+            <a style="margin-right:30px;" class="button" href="<?php echo self::url(); ?>&islem=NewEventForm"><?php echo _e('Add New Event', 'ahmeti-wp-timeline'); ?></a>
+
+            <a style="margin-right:5px;" class="button" href="<?php echo self::url(); ?>&islem=EditSettingsForm"><?php echo _e('Settings', 'ahmeti-wp-timeline'); ?></a>
         <?php
     }
 
@@ -203,6 +198,18 @@ class AhmetiWpTimelineAdmin
         }
 
         $this->footer();
+    }
+
+    public static function url()
+    {
+        return admin_url().'admin.php?page=ahmeti-wp-timeline/index.php';
+    }
+
+    public static function table()
+    {
+        global $wpdb;
+
+        return $wpdb->prefix.'ahmeti_wp_timeline';
     }
 
     public static function pagination($site_url, $top_sayfa, $page, $limit, $page_url)
